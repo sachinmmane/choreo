@@ -14,6 +14,6 @@ Welcome to the Parcelfox, a Distribution Center Management System (DCMS) for Par
 
 This is a demo project built by [Sachin Mane](https://www.linkedin.com/in/sachinmmane/) for the technical assessment round.
 
-The detailed problem statement and exercise for the Technical Assessment is available here: https://github.com/Tetrifox/Sachin-Mane/blob/main/Technical-Assessment.md
+The detailed problem statement and exercise for the [Technical Assessment is available here](https://github.com/Tetrifox/Sachin-Mane/blob/main/Technical-Assessment.md).
 
-You can track the project's progress and tasks through the GitHub issues: https://github.com/Tetrifox/Sachin-Mane/issues
+You can track the project's progress and tasks through the [GitHub issues](https://github.com/Tetrifox/Sachin-Mane/issues).
