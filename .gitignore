@@ -1,1 +1,6 @@
+.DS_Store
+
 env/
+backend/backend/__pycache__/
+backend/user/__pycache__/
+backend/user/migrations/__pycache__/
