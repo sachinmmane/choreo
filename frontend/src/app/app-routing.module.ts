@@ -2,9 +2,10 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LayoutComponent } from './shared/components/layout/layout.component';
 import { authGuard } from './guard/auth.guard';
+import { NotFoundComponent } from './shared/components/not-found/not-found.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'auth', pathMatch: 'full' },
+  { path: '', redirectTo: '/auth', pathMatch: 'full' },
   {
     path: 'auth',
     loadChildren: () => import('./auth/auth.module').then((m) => m.AuthModule),
@@ -33,6 +34,7 @@ const routes: Routes = [
       },
     ],
   },
+  { path: '**', component: NotFoundComponent },
 ];
 
 @NgModule({
