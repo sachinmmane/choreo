@@ -1,0 +1,30 @@
+<div class="sidenav-header">
+  <img
+    [width]="profilPicSizeWidth()"
+    [height]="profilPicSizeHeight()"
+    src="/parcelfox-logo.png"
+    alt="parcelfox-logo"
+  />
+  <div class="display-flex" *ngIf="!sidenavCollapsed()">
+    <h2>Parcelfox</h2>
+  </div>
+</div>
+
+<mat-nav-list class="nav-list">
+  <a
+    mat-list-item
+    *ngFor="let item of menuItemsList"
+    [routerLink]="item.route"
+    class="menu-item"
+    routerLinkActive
+    #rla="routerLinkActive"
+    [activated]="rla.isActive"
+  >
+    <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+    <span matListItemTitle> {{ item.label }}</span>
+  </a>
+  <a mat-list-item class="logout-item" (click)="onLogout()">
+    <mat-icon matListItemIcon>logout</mat-icon>
+    <span matListItemTitle>Logout</span>
+  </a>
+</mat-nav-list>
