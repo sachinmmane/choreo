@@ -13,9 +13,12 @@ class UserSerializer(serializers.ModelSerializer):
 
     def create(self, validate_data):
         # Override the create method to use the create_user method from the User model
+        user_permissions = validate_data.pop('user_permissions', [])
+        groups = validate_data.pop('groups', [])
         user = User.objects.create_user(**validate_data)
+        user.user_permissions.set(user_permissions)
+        user.groups.set(groups)
         return user
-
 
 class DepartmentSerializer(serializers.ModelSerializer):
     class Meta:
