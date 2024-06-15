@@ -11,13 +11,14 @@ import {
   withInterceptors,
 } from '@angular/common/http';
 import { tokenInterceptor } from './services/token.interceptor';
+import { errorInterceptor } from './services/error.interceptor';
 
 @NgModule({
   declarations: [AppComponent],
   imports: [BrowserModule, AppRoutingModule, SharedModule, HttpClientModule],
   providers: [
     provideAnimationsAsync(),
-    provideHttpClient(withInterceptors([tokenInterceptor])),
+    provideHttpClient(withInterceptors([tokenInterceptor, errorInterceptor])),
   ],
   bootstrap: [AppComponent],
 })
