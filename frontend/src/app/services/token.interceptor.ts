@@ -6,7 +6,7 @@ interface TokenResponse {
 }
 
 export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
-  let localUserData: TokenResponse = { refresh: '', access: '' };
+  let localUserData: TokenResponse = { access: '', refresh: '' };
 
   const localData = localStorage.getItem('token');
   if (localData != null) {
