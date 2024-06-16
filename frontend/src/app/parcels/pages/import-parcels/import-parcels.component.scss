@@ -1,0 +1,73 @@
+/* file-upload.component.css */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Align content at the top */
+  height: 90vh;
+  padding-top: 20px; /* Add some padding to avoid touching the very top */
+}
+.sample-link {
+  display: flex;
+  justify-content: end;
+  text-decoration: none;
+  align-items: center;
+  margin-right: 20px;
+}
+mat-card {
+  max-width: 90%;
+  width: -webkit-fill-available;
+}
+
+.drop_box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.file-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10px;
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.image-container {
+  position: relative;
+  display: inline-block;
+}
+
+.close-button {
+  position: absolute;
+  top: -22px;
+  right: -15px;
+  background-color: white;
+  z-index: 1;
+}
+
+.file-image {
+  display: block;
+}
+
+.drop_box:hover {
+  background-color: #f0f0f0;
+}
+
+.drop_box.dragging {
+  background-color: #e0e0e0;
+}
+
+button {
+  margin-top: 10px;
+}
+
+.error {
+  color: red;
+  margin-top: 1rem;
+}

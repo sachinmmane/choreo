@@ -1,6 +1,5 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import Department
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta :
@@ -19,10 +18,3 @@ class UserSerializer(serializers.ModelSerializer):
         user.user_permissions.set(user_permissions)
         user.groups.set(groups)
         return user
-
-class DepartmentSerializer(serializers.ModelSerializer):
-    class Meta:
-     # Specify the model to be used for serialization
-     model = Department
-     # Define the fields to be included in the serialization
-     fields = ["id", "name"]
