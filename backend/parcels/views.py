@@ -75,12 +75,7 @@ class UploadFileView(APIView):
                 department_id = 11  # Regular department
             else:
                 department_id = 9  # Heavy department
-            
-            department_id = 11
-            print("========= 79 value", value) 
-            print("========= 79 weight", weight) 
-            print("========= 79 department_id", department_id) 
-
+                
             department = Department.objects.filter(id=department_id).first()
             if not department:
                 return Response({"error": f"Department with id {department_id} does not exist"},status=status.HTTP_400_BAD_REQUEST)
