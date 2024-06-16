@@ -2,6 +2,8 @@ import {
   HttpInterceptorFn,
   HttpErrorResponse,
   HttpRequest,
+  HttpResponse,
+  HttpEventType,
 } from '@angular/common/http';
 import { catchError, switchMap } from 'rxjs/operators';
 import { throwError, of } from 'rxjs';
@@ -25,25 +27,38 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         }
 
         if (localUserData.refresh) {
+          console.log(localUserData.refresh);
+
           // Make a request to refresh the token
-          const refreshReq = new HttpRequest('POST', '/token/refresh', {
-            refresh: localUserData.refresh,
-          });
+          const refreshReq = new HttpRequest(
+            'POST',
+            'http://127.0.0.1:8000/api/token/refresh',
+            {
+              refresh: localUserData.refresh,
+            }
+          );
 
           return next(refreshReq).pipe(
             switchMap((event: any) => {
-              if (event.body && event.body.access) {
-                localUserData.access = event.body.access;
-                localStorage.setItem('token', JSON.stringify(localUserData));
+              if (
+                event.type === HttpEventType.Response &&
+                event instanceof HttpResponse
+              ) {
+                console.log(event.body);
+                if (event.body && event.body.access) {
+                  localUserData.access = event.body.access;
+                  localStorage.setItem('token', JSON.stringify(localUserData));
 
-                const cloneRequest = req.clone({
-                  setHeaders: {
-                    Authorization: `Bearer ${localUserData.access || ''}`,
-                  },
-                });
-                return next(cloneRequest);
+                  const cloneRequest = req.clone({
+                    setHeaders: {
+                      Authorization: `Bearer ${localUserData.access || ''}`,
+                    },
+                  });
+                  return next(cloneRequest);
+                }
+                return throwError('Unable to refresh token');
               }
-              return throwError('Unable to refresh token');
+              return of(event);
             }),
             catchError((err) => {
               console.error('Token refresh failed', err);
