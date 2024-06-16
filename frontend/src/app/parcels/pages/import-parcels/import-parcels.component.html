@@ -1,1 +1,60 @@
-<p>import-parcels works!</p>
+<!-- file-upload.component.html -->
+<div class="container mat-elevation-z8">
+  <mat-card>
+    <mat-card-header> </mat-card-header>
+    <mat-card-content>
+      <a
+        target="_blank"
+        class="sample-link"
+        href="https://github.com/Tetrifox/Sachin-Mane/blob/main/assets/Container_68465468.xml"
+      >
+        <mat-icon>article</mat-icon>
+        Sample Container Xml File
+      </a>
+      <div
+        *ngIf="!selectedFile"
+        class="drop_box"
+        (click)="openFileDialog()"
+        (drop)="onDrop($event)"
+        (dragover)="onDragOver($event)"
+      >
+        <header>
+          <h4>Upload a container XML file to import parcels</h4>
+        </header>
+        <p>Supported file format: XML</p>
+
+        <input
+          #fileInput
+          type="file"
+          hidden
+          accept=".xml"
+          (change)="onFileSelected($event)"
+        />
+
+        <button mat-raised-button color="primary">Choose File</button>
+        <mat-error *ngIf="error" class="error"
+          >Invalid file format! Please try again.</mat-error
+        >
+      </div>
+      <div *ngIf="selectedFile" class="file-preview">
+        <p>{{ selectedFile.name }}</p>
+        <div class="image-container">
+          <button mat-icon-button class="close-button" (click)="removeFile()">
+            <mat-icon>close</mat-icon>
+          </button>
+          <img
+            width="100"
+            *ngIf="filePreview"
+            src="/xml-icon.png"
+            alt="file preview"
+            class="file-image"
+          />
+        </div>
+      </div>
+      <mat-progress-bar
+        *ngIf="isUploading"
+        mode="indeterminate"
+      ></mat-progress-bar>
+    </mat-card-content>
+  </mat-card>
+</div>
