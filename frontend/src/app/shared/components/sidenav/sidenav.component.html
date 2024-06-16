@@ -18,6 +18,7 @@
     class="menu-item"
     routerLinkActive
     #rla="routerLinkActive"
+    [routerLinkActiveOptions]="{ exact: true }"
     [activated]="rla.isActive"
   >
     <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
