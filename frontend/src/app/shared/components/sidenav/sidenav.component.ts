@@ -23,6 +23,7 @@ export class SidenavComponent {
     { icon: 'inventory_2', label: 'Parcels', route: '/parcels' },
     { icon: 'download', label: 'Import Parcels', route: '/parcels/import' },
     { icon: 'groups', label: 'Departments', route: '/department' },
+    { icon: 'group', label: 'Users', route: '/users' },
     { icon: 'rule', label: 'Rule Management', route: '/rules' },
   ];
 

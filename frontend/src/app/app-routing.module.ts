@@ -23,6 +23,11 @@ const routes: Routes = [
           ),
       },
       {
+        path: 'users',
+        loadChildren: () =>
+          import('./users/users.module').then((m) => m.UsersModule),
+      },
+      {
         path: 'parcels',
         loadChildren: () =>
           import('./parcels/parcel.module').then((m) => m.ParcelsModule),

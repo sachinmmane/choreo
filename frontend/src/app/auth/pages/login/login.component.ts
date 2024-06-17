@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { UserService } from '../../../services/user.service';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +13,7 @@ export class LoginComponent {
   hide = signal(true);
   router = inject(Router);
 
-  constructor(private fb: FormBuilder, private userSrv: UserService) {
+  constructor(private fb: FormBuilder, private authService: AuthService) {
     this.loginForm = this.fb.group({
       username: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
@@ -26,7 +26,7 @@ export class LoginComponent {
   }
 
   onSubmit(): void {
-    this.userSrv.onLogin(this.loginForm.value).subscribe((res: any) => {
+    this.authService.onLogin(this.loginForm.value).subscribe((res: any) => {
       if (res) {
         localStorage.setItem('token', JSON.stringify(res));
         this.router.navigateByUrl('/parcels');
