@@ -48,7 +48,7 @@ export class DepartmentsComponent implements OnInit {
 
   addUpdateDepartment(department?: Department) {
     const dialogRef = this.dialog.open(AddUpdateComponent, {
-      width: '400px',
+      width: '500px',
       data: department,
     });
 
