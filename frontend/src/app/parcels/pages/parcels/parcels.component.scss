@@ -1,0 +1,82 @@
+table {
+  width: 100%;
+}
+.toolbar {
+  align-items: center;
+  justify-items: center;
+  > span {
+    font-weight: 600;
+  }
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.filter-form-field {
+  margin-right: 16px;
+  border-radius: 8px;
+  width: 100%;
+}
+
+.custom-form-field {
+  .mat-form-field-wrapper {
+    border-radius: 8px;
+    font-size: 12px;
+    height: 20px; /* Reduced height */
+    padding: 0;
+
+    .mat-form-field-flex {
+      border-radius: 8px;
+      height: 100%;
+    }
+
+    .mat-form-field-infix {
+      padding: 8px 12px;
+    }
+
+    .mat-select {
+      font-size: 12px;
+
+      .mat-select-trigger {
+        height: 80%;
+        padding: 8px 12px;
+        display: flex;
+        align-items: center;
+      }
+    }
+
+    .mat-select-panel {
+      border-radius: 8px;
+      font-size: 10px;
+    }
+
+    .mat-option {
+      font-size: 12px;
+      height: 36px; /* Reduced height */
+    }
+  }
+}
+
+.status-form-field {
+  margin-top: 16px;
+  .mat-form-field-wrapper {
+    height: 30px; /* Forcefully reduce height */
+  }
+}
+
+.no-data-row {
+  text-align: center;
+  font-weight: bold;
+}
+
+.no-data-element {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10%;
+}
+
+.no-data-element img {
+  margin-bottom: 10px;
+}

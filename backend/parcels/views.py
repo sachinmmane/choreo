@@ -4,7 +4,7 @@ from rest_framework import status, generics
 from .models import Container, Address, Receipient, Parcel, Status
 from departments.models import Department 
 import xml.etree.ElementTree as ET
-from .serializers import StatusSerializer
+from .serializers import StatusSerializer, ParcelSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 class CheckContainerView(APIView):
     def get(self, request, container_id, format=None):
@@ -75,17 +75,17 @@ class UploadFileView(APIView):
                 department_id = 11  # Regular department
             else:
                 department_id = 9  # Heavy department
-            
-            department_id = 11
-            print("========= 79 value", value) 
-            print("========= 79 weight", weight) 
-            print("========= 79 department_id", department_id) 
 
+            if department_id == 10:
+               status_id =  2
+            else:
+               status_id = 1    
+                
             department = Department.objects.filter(id=department_id).first()
             if not department:
                 return Response({"error": f"Department with id {department_id} does not exist"},status=status.HTTP_400_BAD_REQUEST)
 
-            status_instance = Status.objects.filter(id=1).first()
+            status_instance = Status.objects.filter(id=status_id).first()
             if not status_instance:
                 return Response({"error": "Status with id 1 does not exist"}, status=status.HTTP_400_BAD_REQUEST)  
             
@@ -100,6 +100,12 @@ class UploadFileView(APIView):
             )
 
         return Response({"message": "File processed and saved successfully!", "parcel_count": parcel_count}, status=status.HTTP_201_CREATED)
+
+
+class ParcelListView(generics.ListAPIView):
+    queryset = Parcel.objects.all()
+    serializer_class = ParcelSerializer
+    permission_classes = [IsAuthenticated]
 
 class StatusListCreate(generics .ListCreateAPIView):
     # Specify the serializer class to be used
@@ -124,7 +130,7 @@ class StatusUpdate(generics.UpdateAPIView):
     # Specify the serializer class to be used
     serializer_class = StatusSerializer
     # Set the permission class to ensure only authenticated users can access this view
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
         # Define the queryset to be all Department objects
@@ -140,3 +146,37 @@ class StatusDelete(generics.DestroyAPIView):
         # Define the queryset to be all Department objects
         return Status.objects.all()
 
+class ParcelStatusUpdateView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request, pk, format=None):
+        try:
+            parcel = Parcel.objects.get(pk=pk)
+        except Parcel.DoesNotExist:
+            return Response({"error": "Parcel not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        status_id = request.data.get('status_id')
+        if not status_id:
+            return Response({"error": "Status ID is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            status_instance = Status.objects.get(pk=status_id)
+        except Status.DoesNotExist:
+            return Response({"error": "Status not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        parcel.status = status_instance
+        parcel.save()
+
+        return Response({"message": "Parcel status updated successfully"}, status=status.HTTP_200_OK)
+
+class ParcelDetailView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, pk, format=None):
+        try:
+            parcel = Parcel.objects.get(pk=pk)
+        except Parcel.DoesNotExist:
+            return Response({"error": "Parcel not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = ParcelSerializer(parcel)
+        return Response(serializer.data, status=status.HTTP_200_OK)

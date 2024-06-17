@@ -1,6 +1,10 @@
 .DS_Store
 
 env/
-backend/backend/__pycache__/
-backend/user/__pycache__/
-backend/user/migrations/__pycache__/
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# Django migrations
+**/migrations/__pycache__/
+**/migrations/*.pyc

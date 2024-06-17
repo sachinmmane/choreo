@@ -1,3 +1,9 @@
 .env
 db.sqlite3
-backend/backend/__pycache__/
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# Django migrations
+**/migrations/__pycache__/
+**/migrations/*.pyc
