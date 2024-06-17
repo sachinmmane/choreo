@@ -8,3 +8,35 @@ body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+mat-mdc-chip-action-label {
+  color: red !important;
+}
+
+.received-at-dc {
+  background-color: #4caf50 !important; /* Green */
+}
+
+.waiting-for-approval {
+  background-color: #ff9800 !important; /* Orange */
+}
+
+.approved {
+  background-color: #2196f3 !important; /* Blue */
+}
+
+.department-assigned {
+  background-color: #9c27b0 !important; /* Purple */
+}
+
+.shipped-to-customer {
+  background-color: #3f51b5 !important; /* Indigo */
+}
+
+.on-hold {
+  background-color: #f44336 !important; /* Red */
+}
+
+.completed {
+  background-color: #795548 !important; /* Brown */
+}

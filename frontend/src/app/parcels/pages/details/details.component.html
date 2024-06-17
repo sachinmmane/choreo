@@ -1,0 +1,77 @@
+<mat-toolbar class="toolbar">
+  <span>Parcel Details</span>
+  <span class="spacer"></span>
+  <div *ngIf="parcel">
+    <mat-form-field class="status-form-field custom-form-field">
+      <mat-select
+        [value]="parcel.status"
+        (selectionChange)="onStatusChange($event)"
+        name="status"
+        [compareWith]="compareStatus"
+      >
+        @for (status of statusList; track status) {
+        <mat-option [value]="status">{{
+          status.name | replaceUnderscores
+        }}</mat-option
+        >}
+      </mat-select>
+    </mat-form-field>
+  </div>
+</mat-toolbar>
+<div *ngIf="parcel" class="details-container mat-elevation-z8">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title></mat-card-title>
+      <mat-card-subtitle
+        >Container ID: {{ parcel.container.container_id }}</mat-card-subtitle
+      >
+    </mat-card-header>
+    <mat-card-content>
+      <div class="detail-section">
+        <div class="detail-item">
+          <span class="detail-label">Shipping Date:</span>
+          <span class="detail-value">{{
+            parcel.container.shipping_date | date : "dd MMM, yyyy"
+          }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Department:</span>
+          <span class="detail-value">{{ parcel.department.name }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Receipient:</span>
+          <span class="detail-value">{{ parcel.receipient.name }}</span>
+        </div>
+      </div>
+      <div class="detail-section">
+        <div class="detail-item">
+          <span class="detail-label">Address:</span>
+          <span class="detail-value"
+            >{{ parcel.address.city }}, {{ parcel.address.postal_code }}</span
+          >
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Weight:</span>
+          <span class="detail-value">{{ parcel.weight }} kg</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Value:</span>
+          <span class="detail-value">€ {{ parcel.value }} </span>
+        </div>
+      </div>
+      <div class="detail-section">
+        <div class="detail-item">
+          <span class="detail-label">Status:</span>
+          <mat-chip-set>
+            <mat-chip
+              color="primary"
+              selected
+              [ngClass]="parcel.status.name | statusColor"
+              >{{ parcel.status.name | replaceUnderscores }}</mat-chip
+            >
+          </mat-chip-set>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
