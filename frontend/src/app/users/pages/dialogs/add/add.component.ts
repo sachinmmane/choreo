@@ -1,6 +1,8 @@
 import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { UserService } from '../../../../services/user.service';
+import { DepartmentsService } from '../../../../services/departments.service';
 
 @Component({
   selector: 'app-add',
@@ -9,34 +11,63 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 })
 export class AddComponent {
   form: FormGroup;
-  groups: string[] = ['Admin', 'User', 'Guest'];
-  departments: string[] = ['HR', 'Engineering', 'Marketing'];
+  groupListing: any[] = [];
+  departments: any[] = [];
   constructor(
+    private userService: UserService,
+    private departmentsService: DepartmentsService,
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<any>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
+    this.getUserGroups();
+    this.getDepartments();
+
     this.form = this.fb.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
+      first_name: ['', Validators.required],
+      last_name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       username: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
-      group: ['', Validators.required],
-      department: [''],
+      groups: [[], Validators.required],
+      user_department: [''],
+      is_active: [true, Validators.required],
     });
 
     this.form.get('email')!.valueChanges.subscribe((value) => {
       this.form.get('username')!.setValue(value);
     });
-    this.form.get('group')!.valueChanges.subscribe((value) => {
+    this.form.get('groups')!.valueChanges.subscribe((value) => {
       this.updateDepartmentField(value);
     });
   }
 
-  updateDepartmentField(group: string) {
-    const departmentControl: any = this.form.get('department');
-    if (group === 'User') {
+  getUserGroups(): void {
+    this.userService.getUserGroups().subscribe(
+      (data: any[]) => {
+        this.groupListing = data;
+      },
+      (error) => {
+        console.error('Error fetching departments:', error);
+      }
+    );
+  }
+
+  getDepartments(): void {
+    this.departmentsService.getDepartments().subscribe(
+      (data: any[]) => {
+        this.departments = data;
+        console.log(this.departments);
+      },
+      (error) => {
+        console.error('Error fetching departments:', error);
+      }
+    );
+  }
+
+  updateDepartmentField(group: any) {
+    const departmentControl: any = this.form.get('user_department');
+    if (group.name === 'Department Employee') {
       departmentControl.setValidators([Validators.required]);
       departmentControl.updateValueAndValidity();
     } else {
@@ -47,10 +78,26 @@ export class AddComponent {
   }
 
   onSubmit() {
-    console.log(this.form.value);
     if (this.form.valid) {
-      this.dialogRef.close(this.form.value);
+      let user = this.transformUserGroup(this.form.value);
+      this.dialogRef.close(user);
     }
+  }
+
+  transformUserGroup(user: any): any {
+    let transformedUser: any = {
+      ...user,
+      groups: [user.groups.id],
+      user_department: [
+        {
+          department_id: user.user_department?.id,
+        },
+      ],
+    };
+    if (!transformedUser.user_department[0].department_id) {
+      delete transformedUser.user_department;
+    }
+    return transformedUser;
   }
 
   onCancel() {

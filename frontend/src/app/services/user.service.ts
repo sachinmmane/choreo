@@ -15,6 +15,10 @@ export class UserService {
     return this.http.get<any[]>(`${this.apiUrl}/users/`);
   }
 
+  getUserGroups(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/user-groups/`);
+  }
+
   addUser(user: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/user/register/`, user);
   }

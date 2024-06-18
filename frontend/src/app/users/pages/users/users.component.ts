@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
-// import { AddUpdateComponent } from '../../dialogs/add-update/add-update.component';
-import { Department } from '../../../models/department.model';
 import { UserService } from '../../../services/user.service';
 import { AddComponent } from '../dialogs/add/add.component';
 export interface PeriodicElement {
@@ -18,8 +16,8 @@ export interface PeriodicElement {
   styleUrl: './users.component.scss',
 })
 export class UsersComponent {
-  departments: any[] = [];
-  displayedColumns: string[] = ['id', 'name', 'email', 'action'];
+  users: any[] = [];
+  displayedColumns: string[] = ['id', 'name', 'email', 'department', 'action'];
   dataSource = new MatTableDataSource();
 
   constructor(private userService: UserService, private dialog: MatDialog) {}
@@ -35,8 +33,8 @@ export class UsersComponent {
   getUsers(): void {
     this.userService.getUsers().subscribe(
       (data: any[]) => {
-        this.departments = data;
-        this.dataSource = new MatTableDataSource(this.departments);
+        this.users = data;
+        this.dataSource = new MatTableDataSource(this.users);
       },
       (error) => {
         console.error('Error fetching departments:', error);

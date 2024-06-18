@@ -4,15 +4,15 @@
     <div class="form-row">
       <mat-form-field class="mat-form-field" appearance="fill">
         <mat-label>First Name</mat-label>
-        <input matInput formControlName="firstName" required />
-        <mat-error *ngIf="form.controls['firstName'].invalid">
+        <input matInput formControlName="first_name" required />
+        <mat-error *ngIf="form.controls['first_name'].invalid">
           First Name is required
         </mat-error>
       </mat-form-field>
       <mat-form-field class="mat-form-field" appearance="fill">
         <mat-label>Last Name</mat-label>
-        <input matInput formControlName="lastName" required />
-        <mat-error *ngIf="form.controls['lastName'].invalid">
+        <input matInput formControlName="last_name" required />
+        <mat-error *ngIf="form.controls['last_name'].invalid">
           Last Name is required
         </mat-error>
       </mat-form-field>
@@ -36,30 +36,30 @@
     <div class="form-row">
       <mat-form-field class="mat-form-field" appearance="fill">
         <mat-label>Group</mat-label>
-        <mat-select formControlName="group" required>
-          <mat-option *ngFor="let group of groups" [value]="group">
-            {{ group }}
+        <mat-select formControlName="groups" required>
+          <mat-option *ngFor="let group of groupListing" [value]="group">
+            {{ group.name }}
           </mat-option>
         </mat-select>
-        <mat-error *ngIf="form.controls['group'].invalid">
+        <mat-error *ngIf="form.controls['groups'].invalid">
           Group is required
         </mat-error>
       </mat-form-field>
       <mat-form-field
         class="mat-form-field"
         appearance="fill"
-        *ngIf="form.get('group')?.value === 'User'"
+        *ngIf="form.get('groups')?.value.name === 'Department Employee'"
       >
         <mat-label>Department</mat-label>
-        <mat-select formControlName="department" required>
+        <mat-select formControlName="user_department" required>
           <mat-option
             *ngFor="let department of departments"
             [value]="department"
           >
-            {{ department }}
+            {{ department.name }}
           </mat-option>
         </mat-select>
-        <mat-error *ngIf="form.controls['department'].invalid">
+        <mat-error *ngIf="form.controls['user_department'].invalid">
           Department is required
         </mat-error>
       </mat-form-field>
