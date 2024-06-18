@@ -1,20 +1,69 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group 
 from rest_framework import serializers
+from .models import UserDepartment, Department 
+from departments.serializers import DepartmentSerializer
+
+class UserDepartmentSerializer(serializers.ModelSerializer):
+    department_name = serializers.CharField(source='department_id.name', read_only=True)
+    department_id = serializers.PrimaryKeyRelatedField(queryset=Department.objects.all(), write_only=True)
+    department = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = UserDepartment
+        fields = ['department_id', 'department_name', 'department']
+    
+    def get_department(self, obj):
+        return {
+            'department_name': obj.department_id.name,
+            'department_id': obj.department_id.id
+        }
 
 class UserSerializer(serializers.ModelSerializer):
-    class Meta :
-        # Specify the model to be used for serialization
-        model = User
-        # Define the fields to be included in the serialization
-        fields = ["id", "username", "email","password", "is_active", "first_name", "last_name", "user_permissions", "groups"]
-        # Additional keyword arguments for specific fields
-        extra_kwargs = {"password": {"write_only": True}} # Make the password write-only
+    user_department = UserDepartmentSerializer(many=True, required=False)
 
-    def create(self, validate_data):
-        # Override the create method to use the create_user method from the User model
-        user_permissions = validate_data.pop('user_permissions', [])
-        groups = validate_data.pop('groups', [])
-        user = User.objects.create_user(**validate_data)
+    class Meta:
+        model = User
+        fields = [
+            "id", "username", "email", "password", "is_active",
+            "first_name", "last_name", "user_permissions", "groups", "user_department"
+        ]
+        extra_kwargs = {
+            "username": {"required": True},
+            "email": {"required": True},
+            "password": {"write_only": True, "required": True},
+            "is_active": {"required": True},
+            "first_name": {"required": True},
+            "last_name": {"required": True},
+            "groups": {"required": True},
+            "user_department": {"required": False}
+        }
+
+    def create(self, validated_data):
+        user_permissions = validated_data.pop('user_permissions', [])
+        departments_data = validated_data.pop('user_department', [])
+        groups = validated_data.pop('groups', [])
+        user = User.objects.create_user(**validated_data)
         user.user_permissions.set(user_permissions)
         user.groups.set(groups)
+
+        for department_data in departments_data:
+            UserDepartment.objects.create(user_id=user, department_id=department_data['department_id'])
+
         return user
+
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['user_department'] = [
+            {
+                'department_name': user_dept.department_id.name,
+                'department_id': user_dept.department_id.id
+            }
+            for user_dept in instance.user_department.all()
+        ]
+        return representation
+
+class GroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ['id', 'name']

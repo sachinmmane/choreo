@@ -8,13 +8,13 @@ body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
-.mat-mdc-unelevated-button:not(:disabled) {
-  background-color: orangered !important;
-}
+// .mat-mdc-unelevated-button:not(:disabled) {
+//   background-color: orangered !important;
+// }
 
-.mdc-switch:enabled .mdc-switch__track::after {
-  background: orangered !important;
-}
+// .mdc-switch:enabled .mdc-switch__track::after {
+//   background: orangered !important;
+// }
 
 .received-at-dc {
   background-color: #4caf50 !important; /* Green */
