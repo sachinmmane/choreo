@@ -152,7 +152,7 @@ export class ImportParcelsComponent {
 
   openConfirmDialog() {
     const dialogRef = this.dialog.open(ConfirmationComponent, {
-      width: '250px',
+      width: '400px',
       data: {
         message:
           'This container is already imported. Do you want to reimport it?',

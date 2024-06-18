@@ -86,8 +86,11 @@
             color="primary"
             selected
             [ngClass]="element.status.name | statusColor"
-            >{{ element.status.name | replaceUnderscores }}</mat-chip
           >
+            <p [ngStyle]="{ color: 'white' }">
+              {{ element.status.name | replaceUnderscores }}
+            </p>
+          </mat-chip>
         </mat-chip-set>
       </td>
     </ng-container>

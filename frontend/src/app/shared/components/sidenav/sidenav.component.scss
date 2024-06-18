@@ -31,6 +31,11 @@
 .menu-item {
   margin-bottom: 10px; /* Adjust the gap between menu items */
 }
+
 .logout-item {
   margin-top: auto; /* Pushes the logout item to the bottom */
+}
+
+.sidenav {
+  box-shadow: 3px 0 5px -2px rgba(0, 0, 0, 0.2);
 }

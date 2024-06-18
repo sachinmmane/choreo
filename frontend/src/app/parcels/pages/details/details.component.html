@@ -67,8 +67,11 @@
               color="primary"
               selected
               [ngClass]="parcel.status.name | statusColor"
-              >{{ parcel.status.name | replaceUnderscores }}</mat-chip
             >
+              <p [ngStyle]="{ color: 'white' }">
+                {{ parcel.status.name | replaceUnderscores }}
+              </p>
+            </mat-chip>
           </mat-chip-set>
         </div>
       </div>

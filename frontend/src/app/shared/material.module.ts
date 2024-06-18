@@ -15,6 +15,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatDividerModule } from '@angular/material/divider';
 const modules = [
   MatCardModule,
   MatInputModule,
@@ -31,6 +32,7 @@ const modules = [
   MatSelectModule,
   MatChipsModule,
   MatSlideToggleModule,
+  MatDividerModule,
 ];
 
 @NgModule({

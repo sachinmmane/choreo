@@ -1,6 +1,8 @@
 mat-toolbar {
   position: relative;
   z-index: 5;
+  margin-top: 1rem;
+  padding-bottom: 2rem;
 }
 
 .content {
@@ -9,9 +11,17 @@ mat-toolbar {
 
 mat-sidenav-container {
   height: 100vh;
-  border: 1px solid black;
 }
 
-mat-sidenav-content {
-  border-left: 1px solid black;
+.sidenav {
+  box-shadow: 3px 0 5px -2px rgba(0, 0, 0, 0.2);
+}
+
+.mat-toolbar-row,
+.mat-toolbar-single-row {
+  height: 2rem;
+}
+
+.mat-divider {
+  margin-bottom: 20px;
 }
