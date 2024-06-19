@@ -1,0 +1,38 @@
+.rule-management {
+  .rule-form,
+  .rule-list {
+    margin: 16px;
+  }
+
+  mat-card {
+    .form-row {
+      justify-content: center;
+      align-items: center;
+    }
+    margin-bottom: 5%;
+  }
+
+  .mat-mdc-row {
+    cursor: pointer;
+  }
+
+  .form-row {
+    display: flex;
+    align-items: center;
+    padding-right: 50px;
+  }
+
+  .form-field {
+    min-width: 15%;
+    margin-right: 16px;
+  }
+
+  .submit-button {
+    margin-left: 1rem;
+    margin-bottom: 16px;
+  }
+
+  .mb-4 {
+    margin-bottom: 16px;
+  }
+}

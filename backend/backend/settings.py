@@ -59,7 +59,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'user',
     'parcels',
-    'departments'
+    'departments',
+    'rules_management'
 ]
 
 MIDDLEWARE = [
