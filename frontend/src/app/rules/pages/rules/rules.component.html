@@ -1,1 +1,153 @@
-<p>rules works!</p>
+<div class="rule-management">
+  <h2>Rule Management</h2>
+
+  <mat-card>
+    <div class="rule-form">
+      <h3>Add New Rule</h3>
+      <form
+        [formGroup]="ruleForm"
+        (ngSubmit)="isUpdate ? updateRule() : addRule()"
+        class="form-row"
+      >
+        <mat-form-field class="form-field">
+          <mat-label>Rule Type</mat-label>
+          <mat-select formControlName="rule_type" required>
+            <mat-option value="weight">Weight</mat-option>
+            <mat-option value="value">Value</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="form-field">
+          <mat-label>Condition</mat-label>
+          <mat-select formControlName="condition" required>
+            <mat-option
+              *ngFor="let condition of conditions"
+              value="condition.value"
+              >{{ condition.label }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="form-field">
+          <mat-label>Value</mat-label>
+          <input matInput type="number" formControlName="value" required />
+        </mat-form-field>
+
+        <mat-form-field class="mat-form-field" appearance="fill">
+          <mat-label>Department</mat-label>
+          <mat-select formControlName="department" required>
+            <mat-option *ngFor="let dep of departments" [value]="dep.id">
+              {{ dep.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <button
+          *ngIf="!isUpdate"
+          mat-raised-button
+          color="primary"
+          type="submit"
+          class="submit-button"
+        >
+          Add Rule
+        </button>
+        <button
+          *ngIf="isUpdate"
+          mat-raised-button
+          color="primary"
+          type="submit"
+          class="submit-button"
+        >
+          Update Rule
+        </button>
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="switchToAddForm()"
+          type="button"
+          class="submit-button"
+        >
+          Clear
+        </button>
+      </form>
+    </div>
+  </mat-card>
+  <div class="rule-list">
+    <h3>Existing Rules</h3>
+    <p>
+      * Drag and drop the table rows to prioritize rule execution, as the rule
+      engine runs them in the order they appear.
+    </p>
+    <table
+      mat-table
+      [dataSource]="dataSource"
+      class="mat-elevation-z8"
+      cdkDropList
+      (cdkDropListDropped)="onDrop($event)"
+    >
+      <!-- Sequence Column -->
+      <ng-container matColumnDef="sequence">
+        <th mat-header-cell *matHeaderCellDef>Sequence</th>
+        <td mat-cell *matCellDef="let rule">
+          {{ rule.sequence_id }}
+        </td>
+      </ng-container>
+
+      <!-- Rule Type Column -->
+      <ng-container matColumnDef="ruleType">
+        <th mat-header-cell *matHeaderCellDef>Rule Type</th>
+        <td mat-cell *matCellDef="let rule">
+          {{ rule.rule_type | titlecase }}
+        </td>
+      </ng-container>
+
+      <!-- Condition Column -->
+      <ng-container matColumnDef="condition">
+        <th mat-header-cell *matHeaderCellDef>Condition</th>
+        <td mat-cell *matCellDef="let rule">
+          {{ this.getConditionByValue(rule.condition) }}
+        </td>
+      </ng-container>
+
+      <!-- Value Column -->
+      <ng-container matColumnDef="value">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let rule">
+          {{
+            rule.rule_type == "value"
+              ? (rule.value | currency : "EUR")
+              : rule.value + " kg"
+          }}
+        </td>
+      </ng-container>
+
+      <!-- Department Column -->
+      <ng-container matColumnDef="department">
+        <th mat-header-cell *matHeaderCellDef>Department</th>
+        <td mat-cell *matCellDef="let rule">
+          {{ this.getDepartmetById(rule.department) }}
+        </td>
+      </ng-container>
+
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let rule">
+          <button
+            mat-icon-button
+            color="accent"
+            (click)="updateFormDataUpdation(rule)"
+          >
+            <mat-icon color="primary">edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteRule(rule.id)">
+            <mat-icon style="color: rgb(247, 185, 185)">delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns" cdkDrag></tr>
+    </table>
+  </div>
+</div>

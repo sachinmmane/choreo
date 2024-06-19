@@ -5,24 +5,13 @@ from .models import Container, Address, Receipient, Parcel, Status
 from departments.models import Department 
 import xml.etree.ElementTree as ET
 from .serializers import StatusSerializer, ParcelSerializer
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated, AllowAny 
+from .rule_engine import get_department
+
 class CheckContainerView(APIView):
     def get(self, request, container_id, format=None):
         exists = Container.objects.filter(container_id=container_id).exists()
         return Response({"exists": exists}, status=status.HTTP_200_OK)
-
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from .models import Container, Address, Receipient, Parcel
-import xml.etree.ElementTree as ET
-
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from .models import Container, Address, Receipient, Parcel
-from departments.models import Department  # Import the Department model
-import xml.etree.ElementTree as ET
 
 class UploadFileView(APIView):
     def post(self, request, format=None):
@@ -32,10 +21,6 @@ class UploadFileView(APIView):
         root = tree.getroot()
 
         container_id = root.find('Id').text
-        # Uncomment the below lines if you want to prevent duplicate containers
-        # if Container.objects.filter(container_id=container_id).exists():
-        #     return Response({"error": "Container already exists"}, status=status.HTTP_400_BAD_REQUEST)
-
         shipping_date = root.find('ShippingDate').text
         container = Container(container_id=container_id, shipping_date=shipping_date, file=xml_content)
         container.save()
@@ -65,21 +50,14 @@ class UploadFileView(APIView):
 
             weight = float(parcel.find('Weight').text)
             value = float(parcel.find('Value').text)
-            
-            # Determine department based on weight and value
-            if value > 1000:
-                department_id = 10  # Insurance department
-            elif weight <= 1:
-                department_id = 7  # Mail department
-            elif weight <= 10:
-                department_id = 11  # Regular department
-            else:
-                department_id = 9  # Heavy department
 
-            if department_id == 10:
+            # Determine department based on weight and value
+            department_id = get_department(weight, value)
+
+            if department_id == 4:
                status_id =  2
             else:
-               status_id = 1    
+               status_id = 4     
                 
             department = Department.objects.filter(id=department_id).first()
             if not department:
@@ -100,7 +78,6 @@ class UploadFileView(APIView):
             )
 
         return Response({"message": "File processed and saved successfully!", "parcel_count": parcel_count}, status=status.HTTP_201_CREATED)
-
 
 class ParcelListView(generics.ListAPIView):
     queryset = Parcel.objects.all()

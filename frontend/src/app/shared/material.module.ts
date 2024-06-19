@@ -16,6 +16,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDividerModule } from '@angular/material/divider';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 const modules = [
   MatCardModule,
   MatInputModule,
@@ -33,6 +34,7 @@ const modules = [
   MatChipsModule,
   MatSlideToggleModule,
   MatDividerModule,
+  DragDropModule,
 ];
 
 @NgModule({
