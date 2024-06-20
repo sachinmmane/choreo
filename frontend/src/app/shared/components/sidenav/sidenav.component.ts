@@ -1,5 +1,14 @@
-import { Component, Input, computed, inject, signal } from '@angular/core';
+import {
+  AfterContentInit,
+  Component,
+  Input,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../services/auth.service';
+import { ToasterService } from '../../../services/toastr.service';
 
 export type MenuItem = {
   icon: string;
@@ -14,7 +23,9 @@ export type MenuItem = {
 })
 export class SidenavComponent {
   router = inject(Router);
+  userGroup: any;
   sidenavCollapsed = signal(false);
+  user: any;
   @Input() set collapsed(val: boolean) {
     this.sidenavCollapsed.set(val);
   }
@@ -32,8 +43,32 @@ export class SidenavComponent {
   );
   profilPicSizeWidth = computed(() => (this.sidenavCollapsed() ? '32' : '150'));
 
+  constructor(
+    private authService: AuthService,
+    private toastrService: ToasterService
+  ) {
+    this.getUserDetails();
+  }
+
   onLogout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
     this.router.navigateByUrl('/auth');
+  }
+
+  getUserDetails(): void {
+    this.authService.getUserDetails().subscribe(
+      (res: any) => {
+        if (res) {
+          localStorage.setItem('user', JSON.stringify(res));
+          this.user = res;
+          console.log('user', this.user);
+          this.userGroup = res?.groups[0]?.name;
+        }
+      },
+      (error: Error) => {
+        this.toastrService.showError(error.message, 'Failed');
+      }
+    );
   }
 }
