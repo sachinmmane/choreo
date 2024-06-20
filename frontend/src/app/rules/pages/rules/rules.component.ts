@@ -6,6 +6,9 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ChangeDetectorRef } from '@angular/core';
 import { DepartmentsService } from '../../../services/departments.service';
 import { MatTableDataSource } from '@angular/material/table';
+import { ConfirmationComponent } from '../../dialogs/confirmation/confirmation.component';
+import { MatDialog } from '@angular/material/dialog';
+import { ToasterService } from '../../../services/toastr.service';
 
 @Component({
   selector: 'app-rules',
@@ -40,7 +43,9 @@ export class RulesComponent {
     private departmentService: DepartmentsService,
     private ruleService: RuleService,
     private fb: FormBuilder,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private dialog: MatDialog,
+    private toastService: ToasterService
   ) {
     this.ruleForm = this.fb.group({
       rule_type: ['', Validators.required],
@@ -61,16 +66,21 @@ export class RulesComponent {
         this.departments = data;
       },
       (error) => {
-        console.error('Error fetching departments:', error);
+        this.toastService.showError(error.message, 'Failed, ');
       }
     );
   }
 
   loadRules(): void {
-    this.ruleService.getRules().subscribe((rules: any[]) => {
-      this.rules = rules;
-      this.dataSource = new MatTableDataSource(this.rules);
-    });
+    this.ruleService.getRules().subscribe(
+      (rules: any[]) => {
+        this.rules = rules;
+        this.dataSource = new MatTableDataSource(this.rules);
+      },
+      (error) => {
+        this.toastService.showError(error.message, 'Failed, ');
+      }
+    );
   }
 
   getDepartmetById(value: any) {
@@ -87,10 +97,21 @@ export class RulesComponent {
     if (this.ruleForm.valid) {
       const newRule: Rule = this.ruleForm.value;
       newRule.sequence_id = this.rules.length + 1;
-      this.ruleService.createRule(newRule).subscribe((rule) => {
-        this.rules.push(rule);
-        this.switchToAddForm();
-      });
+      this.ruleService.createRule(newRule).subscribe(
+        (rule) => {
+          this.rules.push(rule);
+          this.dataSource = new MatTableDataSource(this.rules);
+          this.switchToAddForm();
+          this.loadRules();
+          this.toastService.showSuccess(
+            'Rule created successfully',
+            'Success, '
+          );
+        },
+        (error) => {
+          this.toastService.showError(error.message, 'Failed, ');
+        }
+      );
     }
   }
 
@@ -102,7 +123,18 @@ export class RulesComponent {
       value: 0,
       department: '',
     });
+    Object.keys(this.ruleForm.controls).forEach((key) => {
+      const control = this.ruleForm.get(key);
+      if (control) {
+        control.markAsPristine();
+        control.markAsUntouched();
+        control.updateValueAndValidity();
+      }
+    });
+    this.ruleForm.markAsPristine();
+    this.ruleForm.markAsUntouched();
   }
+
   updateFormDataUpdation(rule: Rule): void {
     this.ruleForm.patchValue({
       rule_type: rule.rule_type,
@@ -119,21 +151,59 @@ export class RulesComponent {
     newRule.sequence_id = this.selectedRuleForUpdation.sequence_id;
     this.ruleService
       .updateRule(newRule, this.selectedRuleForUpdation.id)
-      .subscribe((rule) => {
-        this.loadRules();
-      });
+      .subscribe(
+        (rule) => {
+          this.loadRules();
+          this.switchToAddForm();
+          this.toastService.showSuccess(
+            'Rule updated successfully',
+            'Success, '
+          );
+        },
+        (error) => {
+          this.toastService.showError(error.message, 'Failed, ');
+        }
+      );
   }
 
   deleteRule(id: any): void {
-    this.ruleService.deleteRule(id).subscribe(() => {
-      this.rules = this.rules.filter((rule) => rule.id !== id);
+    const dialogRef = this.dialog.open(ConfirmationComponent, {
+      width: '500px',
+    });
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log(result);
+      if (result) {
+        this.ruleService.deleteRule(id).subscribe(
+          () => {
+            this.rules = this.rules.filter((rule) => rule.id !== id);
+            this.dataSource = new MatTableDataSource(this.rules);
+            this.updateSequence(this.getCurrentIndexArray());
+            this.toastService.showSuccess(
+              'Rule deleted successfully',
+              'Success, '
+            );
+          },
+          (error) => {
+            this.toastService.showError(error.message, 'Failed, ');
+          }
+        );
+      }
     });
   }
 
   updateSequence(updatedSequence: any): void {
-    this.ruleService.updateRuleSequence(updatedSequence).subscribe((rule) => {
-      this.loadRules();
-    });
+    this.ruleService.updateRuleSequence(updatedSequence).subscribe(
+      (rule) => {
+        this.loadRules();
+        this.toastService.showSuccess(
+          'Rule sequence updated successfully',
+          'Success, '
+        );
+      },
+      (error) => {
+        this.toastService.showError(error.message, 'Failed, ');
+      }
+    );
   }
 
   onDrop(event: CdkDragDrop<any[]>): void {
@@ -150,3 +220,5 @@ export class RulesComponent {
     }));
   }
 }
+
+// this.toastService.showError(error.message, 'Failed, ');

@@ -5,9 +5,10 @@ import { RulesRoutingModule } from './rules-routing.module';
 import { RulesComponent } from './pages/rules/rules.component';
 import { MaterialModule } from '../shared/material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ConfirmationComponent } from './dialogs/confirmation/confirmation.component';
 
 @NgModule({
-  declarations: [RulesComponent],
+  declarations: [RulesComponent, ConfirmationComponent],
   imports: [
     CommonModule,
     RulesRoutingModule,

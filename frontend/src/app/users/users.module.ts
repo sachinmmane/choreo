@@ -6,6 +6,7 @@ import { UsersComponent } from './pages/users/users.component';
 import { MaterialModule } from '../shared/material.module';
 import { AddComponent } from './pages/dialogs/add/add.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { SharedModule } from '../shared/shared-module';
 
 @NgModule({
   declarations: [UsersComponent, AddComponent],
@@ -14,6 +15,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     UsersRoutingModule,
     ReactiveFormsModule,
     MaterialModule,
+    SharedModule,
   ],
 })
 export class UsersModule {}

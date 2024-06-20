@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { ToastrModule } from 'ngx-toastr';
 import { SharedModule } from './shared/shared-module';
 import {
   HttpClientModule,
@@ -15,7 +16,13 @@ import { errorInterceptor } from './services/error.interceptor';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, AppRoutingModule, SharedModule, HttpClientModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    SharedModule,
+    HttpClientModule,
+    ToastrModule.forRoot(),
+  ],
   providers: [
     provideAnimationsAsync(),
     provideHttpClient(withInterceptors([tokenInterceptor, errorInterceptor])),

@@ -2,6 +2,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ParcelsService } from '../../../services/parcels.service';
 import { ConfirmationComponent } from '../../dialogs/confirmation/confirmation.component';
 import { MatDialog } from '@angular/material/dialog';
+import { ToasterService } from '../../../services/toastr.service';
 
 @Component({
   selector: 'app-import-parcels',
@@ -19,7 +20,8 @@ export class ImportParcelsComponent {
 
   constructor(
     private parcelService: ParcelsService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private toastService: ToasterService
   ) {}
 
   onFileSelected(event: Event): void {
@@ -77,7 +79,6 @@ export class ImportParcelsComponent {
     this.readFileContent(file)
       .then((content) => {
         const id = this.extractIdFromXML(content);
-        console.log('Container ID:', id);
         this.checkFileExistence(id);
       })
       .catch((error) => {
@@ -89,14 +90,19 @@ export class ImportParcelsComponent {
     if (this.selectedFile) {
       // Uncomment the following lines to make an actual API call
       this.parcelService.onFileUpload(this.selectedFile).subscribe(
-        () => {
+        (data: any) => {
           this.isUploading = false;
-          alert('File uploaded successfully');
+          this.toastService.showSuccess(
+            `Container processed and saved ${data.parcel_count} ${
+              data.parcel_count == 1 ? 'parcel' : 'parcels'
+            } successfully`,
+            'Success, '
+          );
           this.removeFile();
         },
         (error: any) => {
           this.isUploading = false;
-          console.error('Failed to upload file', error);
+          this.toastService.showError(error.message, 'Failed, ');
         }
       );
     }
@@ -152,10 +158,10 @@ export class ImportParcelsComponent {
 
   openConfirmDialog() {
     const dialogRef = this.dialog.open(ConfirmationComponent, {
-      width: '400px',
+      width: '700px',
       data: {
         message:
-          'This container is already imported. Do you want to reimport it?',
+          'This container has already been imported. Would you like to proceed with the re-import?',
       },
     });
     dialogRef.afterClosed().subscribe((result: any) => {

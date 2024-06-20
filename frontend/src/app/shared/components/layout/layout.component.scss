@@ -25,3 +25,13 @@ mat-sidenav-container {
 .mat-divider {
   margin-bottom: 20px;
 }
+
+.router-outlet-container {
+  position: relative;
+  z-index: 1;
+}
+
+.router-outlet-container.loading {
+  opacity: 0;
+  pointer-events: none;
+}

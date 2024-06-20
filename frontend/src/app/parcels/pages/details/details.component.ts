@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ParcelsService } from '../../../services/parcels.service';
 import { ActivatedRoute } from '@angular/router';
+import { ToasterService } from '../../../services/toastr.service';
 
 @Component({
   selector: 'app-details',
@@ -11,7 +12,8 @@ export class DetailsComponent {
   statusList: any[] = [];
   constructor(
     private parcelsService: ParcelsService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private toastService: ToasterService
   ) {
     this.getParcelById();
     this.getStatus();
@@ -25,7 +27,7 @@ export class DetailsComponent {
         this.parcel = data;
       },
       (error: Error) => {
-        console.error('Error fetching departments:', error);
+        this.toastService.showError(error.message, 'Failed, ');
       }
     );
   }
@@ -36,10 +38,13 @@ export class DetailsComponent {
     this.parcelsService.updateParcelStatus(id, statusId).subscribe(
       (response) => {
         this.getParcelById();
-        console.log('Parcel status updated successfully', response);
+        this.toastService.showSuccess(
+          'Parcel status updated successfully',
+          'Success, '
+        );
       },
       (error: Error) => {
-        console.error('Error fetching departments:', error);
+        this.toastService.showError(error.message, 'Failed, ');
       }
     );
   }
@@ -50,7 +55,7 @@ export class DetailsComponent {
         this.statusList = data;
       },
       (error: Error) => {
-        console.error('Error fetching departments:', error);
+        this.toastService.showError(error.message, 'Failed, ');
       }
     );
   }

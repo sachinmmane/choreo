@@ -1,7 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, NgZone, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { ParcelsService } from '../../../services/parcels.service';
 import { MatPaginator } from '@angular/material/paginator';
+import { LoaderService } from '../../../services/loader.service';
 
 @Component({
   selector: 'app-parcels',
@@ -24,7 +25,11 @@ export class ParcelsComponent implements OnInit {
   dataSource = new MatTableDataSource<any>();
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private parcelsService: ParcelsService) {}
+  constructor(
+    private parcelsService: ParcelsService,
+    private loaderService: LoaderService,
+    private ngZone: NgZone
+  ) {}
   ngOnInit(): void {
     this.getParcels();
   }
@@ -35,15 +40,16 @@ export class ParcelsComponent implements OnInit {
   }
 
   getParcels(): void {
+    this.loaderService.show();
     this.parcelsService.getParcels().subscribe(
       (data: any[]) => {
+        this.loaderService.hide();
         this.parcels = data;
-        console.log(this.parcels);
-
         this.dataSource = new MatTableDataSource(this.parcels);
         this.dataSource.paginator = this.paginator;
       },
       (error: Error) => {
+        this.loaderService.hide();
         console.error('Error fetching departments:', error);
       }
     );

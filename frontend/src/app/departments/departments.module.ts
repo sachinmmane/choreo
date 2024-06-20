@@ -6,6 +6,7 @@ import { DepartmentsRoutingModule } from './departments-routing.module';
 import { DepartmentsComponent } from './pages/departments/departments.component';
 import { MaterialModule } from '../shared/material.module';
 import { AddUpdateComponent } from './dialogs/add-update/add-update.component';
+import { SharedModule } from '../shared/shared-module';
 
 @NgModule({
   declarations: [DepartmentsComponent, AddUpdateComponent],
@@ -14,6 +15,7 @@ import { AddUpdateComponent } from './dialogs/add-update/add-update.component';
     DepartmentsRoutingModule,
     MaterialModule,
     ReactiveFormsModule,
+    SharedModule,
   ],
 })
 export class DepartmentModule {}

@@ -10,6 +10,7 @@ import { ReplaceUnderscoresPipe } from '../pipes/replace-underscores.pipe';
 
 import { DetailsComponent } from './pages/details/details.component';
 import { StatusColorPipe } from '../pipes/status-color.pipe';
+import { SharedModule } from '../shared/shared-module';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,6 @@ import { StatusColorPipe } from '../pipes/status-color.pipe';
     StatusColorPipe,
     DetailsComponent,
   ],
-  imports: [CommonModule, ParcelsRoutingModule, MaterialModule],
+  imports: [CommonModule, ParcelsRoutingModule, MaterialModule, SharedModule],
 })
 export class ParcelsModule {}
