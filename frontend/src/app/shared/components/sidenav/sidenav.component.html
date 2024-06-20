@@ -11,19 +11,24 @@
 </div>
 
 <mat-nav-list class="nav-list">
-  <a
-    mat-list-item
-    *ngFor="let item of menuItemsList"
-    [routerLink]="item.route"
-    class="menu-item"
-    routerLinkActive
-    #rla="routerLinkActive"
-    [routerLinkActiveOptions]="{ exact: true }"
-    [activated]="rla.isActive"
-  >
-    <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
-    <span matListItemTitle> {{ item.label }}</span>
-  </a>
+  <ng-container *ngFor="let item of menuItemsList">
+    <a
+      mat-list-item
+      [routerLink]="item.route"
+      class="menu-item"
+      routerLinkActive
+      #rla="routerLinkActive"
+      [routerLinkActiveOptions]="{ exact: true }"
+      [activated]="rla.isActive"
+      *ngIf="
+        !(item.label != 'Parcels' && userGroup !== 'Distribution Center Admin')
+      "
+    >
+      <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+      <span matListItemTitle> {{ item.label }}</span>
+    </a>
+  </ng-container>
+
   <a mat-list-item class="logout-item" (click)="onLogout()">
     <mat-icon matListItemIcon>logout</mat-icon>
     <span matListItemTitle>Logout</span>

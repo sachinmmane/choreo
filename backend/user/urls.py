@@ -9,4 +9,5 @@ urlpatterns = [
     path('token', TokenObtainPairView.as_view(), name='get_token'),
     path('token/refresh', TokenRefreshView.as_view(), name='refresh'),
     path('user-groups/', views.GroupView.as_view(), name='user-groups'),
+    path('user/me/', views.UserDetailView.as_view(), name='user_detail'),
 ]   

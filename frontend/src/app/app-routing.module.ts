@@ -3,12 +3,15 @@ import { RouterModule, Routes } from '@angular/router';
 import { LayoutComponent } from './shared/components/layout/layout.component';
 import { authGuard } from './guard/auth.guard';
 import { NotFoundComponent } from './shared/components/not-found/not-found.component';
+import { reverseAuthGuard } from './guard/revers-auth.guard';
+import { roleGuard } from './guard/role.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: '/auth', pathMatch: 'full' },
   {
     path: 'auth',
     loadChildren: () => import('./auth/auth.module').then((m) => m.AuthModule),
+    canActivate: [reverseAuthGuard],
   },
   {
     path: '',
