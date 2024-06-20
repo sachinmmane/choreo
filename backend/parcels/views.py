@@ -2,6 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, generics
 from .models import Container, Address, Receipient, Parcel, Status
+from user.models import UserDepartment
 from departments.models import Department 
 import xml.etree.ElementTree as ET
 from .serializers import StatusSerializer, ParcelSerializer
@@ -80,9 +81,16 @@ class UploadFileView(APIView):
         return Response({"message": "File processed and saved successfully!", "parcel_count": parcel_count}, status=status.HTTP_201_CREATED)
 
 class ParcelListView(generics.ListAPIView):
-    queryset = Parcel.objects.all()
     serializer_class = ParcelSerializer
     permission_classes = [IsAuthenticated]
+    def get_queryset(self):
+        user = self.request.user
+        user_groups = user.groups.values_list('name', flat=True)
+        if "Department Employee" in user_groups:
+            user_department = UserDepartment.objects.filter(user_id = user.id).first()
+            if user_department:
+                return Parcel.objects.filter(department_id=user_department.department_id.id)
+        return Parcel.objects.all()
 
 class StatusListCreate(generics .ListCreateAPIView):
     # Specify the serializer class to be used

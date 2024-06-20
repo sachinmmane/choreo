@@ -30,8 +30,6 @@ export class AuthService {
 
   getUserGroup(): string {
     const user = this.getUser();
-    console.log('dsaf', user.groups[0]?.name);
-
     return user ? user.groups[0]?.name : null;
   }
 }
