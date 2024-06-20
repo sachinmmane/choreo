@@ -22,7 +22,7 @@
           <mat-select formControlName="condition" required>
             <mat-option
               *ngFor="let condition of conditions"
-              value="condition.value"
+              [value]="condition.value"
               >{{ condition.label }}</mat-option
             >
           </mat-select>

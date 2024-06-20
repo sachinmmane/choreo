@@ -15,6 +15,9 @@
       </button>
     </mat-toolbar>
     <mat-divider></mat-divider>
-    <router-outlet></router-outlet>
+    <app-loader *ngIf="loading"></app-loader>
+    <div class="router-outlet-container" [class.loading]="loading">
+      <router-outlet></router-outlet>
+    </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

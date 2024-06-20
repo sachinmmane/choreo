@@ -13,8 +13,7 @@ interface Department {
   providedIn: 'root',
 })
 export class DepartmentsService {
-  private apiUrl = `${environment.apiUrl}/departments/`; // Adjust the API URL as needed
-
+  private apiUrl = `${environment.apiUrl}/departments/`;
   constructor(private http: HttpClient) {}
 
   getDepartments(): Observable<Department[]> {

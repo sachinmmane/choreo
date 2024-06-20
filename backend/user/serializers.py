@@ -3,6 +3,22 @@ from rest_framework import serializers
 from .models import UserDepartment, Department 
 from departments.serializers import DepartmentSerializer
 
+class GroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ['id', 'name']
+        
+    def to_internal_value(self, data):
+        if isinstance(data, int):
+            try:
+                return Group.objects.get(id=data)
+            except Group.DoesNotExist:
+                raise serializers.ValidationError("Invalid group ID")
+        elif isinstance(data, dict):
+            return super().to_internal_value(data)
+        else:
+            raise serializers.ValidationError("Invalid data type for group")
+
 class UserDepartmentSerializer(serializers.ModelSerializer):
     department_name = serializers.CharField(source='department_id.name', read_only=True)
     department_id = serializers.PrimaryKeyRelatedField(queryset=Department.objects.all(), write_only=True)
@@ -20,6 +36,7 @@ class UserDepartmentSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     user_department = UserDepartmentSerializer(many=True, required=False)
+    groups = GroupSerializer(many=True, required=True)
 
     class Meta:
         model = User
@@ -62,8 +79,3 @@ class UserSerializer(serializers.ModelSerializer):
             for user_dept in instance.user_department.all()
         ]
         return representation
-
-class GroupSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Group
-        fields = ['id', 'name']
